@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LiveRouteImport } from './routes/live'
 import { Route as HistoryIndexRouteImport } from './routes/history.index'
+import { Route as HistoryIdRouteImport } from './routes/history.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,34 +29,43 @@ const HistoryIndexRoute = HistoryIndexRouteImport.update({
   path: '/history/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HistoryIdRoute = HistoryIdRouteImport.update({
+  id: '/history/$id',
+  path: '/history/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/live': typeof LiveRoute
+  '/history/$id': typeof HistoryIdRoute
   '/history/': typeof HistoryIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/live': typeof LiveRoute
+  '/history/$id': typeof HistoryIdRoute
   '/history': typeof HistoryIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/live': typeof LiveRoute
+  '/history/$id': typeof HistoryIdRoute
   '/history/': typeof HistoryIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/live' | '/history/'
+  fullPaths: '/' | '/live' | '/history/$id' | '/history/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/live' | '/history'
-  id: '__root__' | '/' | '/live' | '/history/'
+  to: '/' | '/live' | '/history/$id' | '/history'
+  id: '__root__' | '/' | '/live' | '/history/$id' | '/history/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LiveRoute: typeof LiveRoute
+  HistoryIdRoute: typeof HistoryIdRoute
   HistoryIndexRoute: typeof HistoryIndexRoute
 }
 
@@ -82,12 +92,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HistoryIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/history/$id': {
+      id: '/history/$id'
+      path: '/history/$id'
+      fullPath: '/history/$id'
+      preLoaderRoute: typeof HistoryIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LiveRoute: LiveRoute,
+  HistoryIdRoute: HistoryIdRoute,
   HistoryIndexRoute: HistoryIndexRoute,
 }
 export const routeTree = rootRouteImport
